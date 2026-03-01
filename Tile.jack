@@ -1,4 +1,197 @@
 class Tile {
+    field int type;
+    field boolean sel, flagged, uncovered;
 
 
+    method void incType() {
+        let type = type + 1;
+    }
+
+
+
+
+    function void pokeCursor(int location) {
+        var int memAddress;
+        let memAddress = 16384+location;
+        // column 0
+        do Memory.poke(memAddress, 7175);
+        do Memory.poke(memAddress +32, 4097);
+        do Memory.poke(memAddress +64, 4097);
+        do Memory.poke(memAddress +320, 4097);
+        do Memory.poke(memAddress +352, 4097);
+        do Memory.poke(memAddress +384, 7175);
+        return;
+    }
+
+    function void pokeBorder(int location) {
+        var int memAddress;
+        let memAddress = 16384+location;
+        // column 0
+        do Memory.poke(memAddress, ~32767);
+        do Memory.poke(memAddress +32, ~32767);
+        do Memory.poke(memAddress +64, ~32767);
+        do Memory.poke(memAddress +96, ~32767);
+        do Memory.poke(memAddress +128, ~32767);
+        do Memory.poke(memAddress +160, ~32767);
+        do Memory.poke(memAddress +192, ~32767);
+        do Memory.poke(memAddress +224, ~32767);
+        do Memory.poke(memAddress +256, ~32767);
+        do Memory.poke(memAddress +288, ~32767);
+        do Memory.poke(memAddress +320, ~32767);
+        do Memory.poke(memAddress +352, ~32767);
+        do Memory.poke(memAddress +384, ~32767);
+        do Memory.poke(memAddress +416, ~32767);
+        do Memory.poke(memAddress +448, ~32767);
+        do Memory.poke(memAddress +480, -1);
+        return;
+    }
+
+    function void pokeFlag(int location) {
+        var int memAddress;
+        let memAddress = 16384+location;
+        // column 0
+        do Memory.poke(memAddress, 24);
+        do Memory.poke(memAddress +32, 120);
+        do Memory.poke(memAddress +64, 248);
+        do Memory.poke(memAddress +96, 120);
+        do Memory.poke(memAddress +128, 24);
+        do Memory.poke(memAddress +160, 8);
+        do Memory.poke(memAddress +192, 8);
+        do Memory.poke(memAddress +224, 8);
+        do Memory.poke(memAddress +256, 8);
+        do Memory.poke(memAddress +288, 127);
+        return;
+    }
+
+
+    function void pokeMine(int location) {
+        var int memAddress;
+        let memAddress = 16384+location;
+        // column 0
+        do Memory.poke(memAddress, 32);
+        do Memory.poke(memAddress +32, 546);
+        do Memory.poke(memAddress +64, 372);
+        do Memory.poke(memAddress +96, 248);
+        do Memory.poke(memAddress +128, 492);
+        do Memory.poke(memAddress +160, 2047);
+        do Memory.poke(memAddress +192, 508);
+        do Memory.poke(memAddress +224, 248);
+        do Memory.poke(memAddress +256, 372);
+        do Memory.poke(memAddress +288, 546);
+        do Memory.poke(memAddress +320, 32);
+        return;
+    }
+
+
+    function void pokeOne(int location) {
+        var int memAddress;
+        let memAddress = 16384+location;
+        // column 0
+        do Memory.poke(memAddress, 4);
+        do Memory.poke(memAddress +32, 6);
+        do Memory.poke(memAddress +64, 5);
+        do Memory.poke(memAddress +96, 4);
+        do Memory.poke(memAddress +128, 4);
+        do Memory.poke(memAddress +160, 4);
+        do Memory.poke(memAddress +192, 31);
+        return;
+    }
+
+    function void pokeTwo(int location) {
+        var int memAddress;
+        let memAddress = 16384+location;
+        // column 0
+        do Memory.poke(memAddress, 14);
+        do Memory.poke(memAddress +32, 17);
+        do Memory.poke(memAddress +64, 16);
+        do Memory.poke(memAddress +96, 8);
+        do Memory.poke(memAddress +128, 6);
+        do Memory.poke(memAddress +160, 1);
+        do Memory.poke(memAddress +192, 31);
+        return;
+    }
+
+    function void pokeThree(int location) {
+        var int memAddress;
+        let memAddress = 16384+location;
+        // column 0
+        do Memory.poke(memAddress, 14);
+        do Memory.poke(memAddress +32, 17);
+        do Memory.poke(memAddress +64, 16);
+        do Memory.poke(memAddress +96, 12);
+        do Memory.poke(memAddress +128, 16);
+        do Memory.poke(memAddress +160, 17);
+        do Memory.poke(memAddress +192, 14);
+        return;
+    }
+
+    function void pokeFour(int location) {
+        var int memAddress;
+        let memAddress = 16384+location;
+        // column 0
+        do Memory.poke(memAddress, 17);
+        do Memory.poke(memAddress +32, 17);
+        do Memory.poke(memAddress +64, 17);
+        do Memory.poke(memAddress +96, 31);
+        do Memory.poke(memAddress +128, 16);
+        do Memory.poke(memAddress +160, 16);
+        do Memory.poke(memAddress +192, 16);
+        return;
+    }
+
+    function void pokeFive(int location) {
+        var int memAddress;
+        let memAddress = 16384+location;
+        // column 0
+        do Memory.poke(memAddress, 31);
+        do Memory.poke(memAddress +32, 1);
+        do Memory.poke(memAddress +64, 1);
+        do Memory.poke(memAddress +96, 15);
+        do Memory.poke(memAddress +128, 16);
+        do Memory.poke(memAddress +160, 17);
+        do Memory.poke(memAddress +192, 14);
+        return;
+    }
+
+    function void pokeSix(int location) {
+        var int memAddress;
+        let memAddress = 16384+location;
+        // column 0
+        do Memory.poke(memAddress, 14);
+        do Memory.poke(memAddress +32, 1);
+        do Memory.poke(memAddress +64, 1);
+        do Memory.poke(memAddress +96, 15);
+        do Memory.poke(memAddress +128, 17);
+        do Memory.poke(memAddress +160, 17);
+        do Memory.poke(memAddress +192, 14);
+        return;
+    }
+
+    function void pokeSeven(int location) {
+        var int memAddress;
+        let memAddress = 16384+location;
+        // column 0
+        do Memory.poke(memAddress, 31);
+        do Memory.poke(memAddress +32, 16);
+        do Memory.poke(memAddress +64, 8);
+        do Memory.poke(memAddress +96, 8);
+        do Memory.poke(memAddress +128, 4);
+        do Memory.poke(memAddress +160, 4);
+        do Memory.poke(memAddress +192, 4);
+        return;
+    }
+
+    function void pokeEight(int location) {
+        var int memAddress;
+        let memAddress = 16384+location;
+        // column 0
+        do Memory.poke(memAddress, 14);
+        do Memory.poke(memAddress +32, 17);
+        do Memory.poke(memAddress +64, 17);
+        do Memory.poke(memAddress +96, 14);
+        do Memory.poke(memAddress +128, 17);
+        do Memory.poke(memAddress +160, 17);
+        do Memory.poke(memAddress +192, 14);
+        return;
+    }
 }
