@@ -1,4 +1,29 @@
 class Minesweeper {
+    static int width, height;
+    static Array minefield;
+
+    constructor Minesweeper new(int sizex, int sizey) {
+        var i;
+        var size;
+        var arrayIndex;
+        var arrayObjs;
+
+        let size = sizex * sizey * 4; // The Tile class takes 4 bytes.
+        let arrayObjs = sizex * sizey; // Object Count
+        let width = sizex;
+        let height = sizey;
+        let minefield = Array.new(size);
+
+        while (i < arrayObjs) {
+            // Tile object demands 4 bytes, so index every 4 bytes.
+            let arrayIndex = i * 4;
+            minefield[arrayIndex] = Tile.new();
+        }
+
+
+
+        return this;
+    }
 
 
 }

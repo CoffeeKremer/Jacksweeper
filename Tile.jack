@@ -3,7 +3,6 @@ class Tile {
     field boolean sel, flagged, uncovered;
 
     constructor Tile new() {
-        let uncovered = true;
         return this;
     }
 
@@ -18,7 +17,7 @@ class Tile {
     }
 
     method void uncoverTile() {
-        let uncovered = false;
+        let uncovered = true;
         return;
     }
 
