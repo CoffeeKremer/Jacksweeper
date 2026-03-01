@@ -2,13 +2,30 @@ class Tile {
     field int type;
     field boolean sel, flagged, uncovered;
 
+    constructor Tile new() {
+        let uncovered = true;
+        return this;
+    }
+
+    method void flipFlag() {
+        let flagged = ~flagged;
+        return;
+    }
+
+    method void flipSel() {
+        let sel = ~sel;
+        return;
+    }
+
+    method void uncoverTile() {
+        let uncovered = false;
+        return;
+    }
 
     method void incType() {
         let type = type + 1;
+        return;
     }
-
-
-
 
     function void pokeCursor(int location) {
         var int memAddress;
