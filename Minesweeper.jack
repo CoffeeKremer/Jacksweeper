@@ -8,7 +8,7 @@ class Minesweeper {
         var arrayIndex;
         var arrayObjs;
 
-        let size = sizex * sizey * 4; // The Tile class takes 4 bytes.
+        let size = sizex * sizey * 4; // The Tile class takes 4 bytes (4x16).
         let arrayObjs = sizex * sizey; // Object Count
         let width = sizex;
         let height = sizey;
@@ -25,5 +25,14 @@ class Minesweeper {
         return this;
     }
 
+
+    method void plantMines() {
+        // Need to make a rand func/class
+
+    }
+
+    method void setTileNums() {
+        // Create plantMines first!
+    }
 
 }

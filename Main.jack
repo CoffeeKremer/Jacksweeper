@@ -1,4 +1,15 @@
 class Main {
+
+    // TODO:
+    // Create rand func/class
+    //     NOTE: The player will have to give inputs for randomness
+    // Set mines (ref. prev)
+    // Set tile nums (ref. prev)
+    // Get memory offset (Each tile is 32x32, or 16x16 with 1 pixel meaning 2)
+    //     for cursor placement and tile drawing
+    // Get KBD support
+    // Create game loop (ref. all prev)
+
     function void main() {
         return;
     }
