@@ -3,10 +3,10 @@ class Minesweeper {
     static Array minefield;
 
     constructor Minesweeper new(int sizex, int sizey) {
-        var i;
-        var size;
-        var arrayIndex;
-        var arrayObjs;
+        var int i;
+        var int size;
+        var int arrayIndex;
+        var int arrayObjs;
 
         let size = sizex * sizey * 4; // The Tile class takes 4 bytes (4x16).
         let arrayObjs = sizex * sizey; // Object Count
