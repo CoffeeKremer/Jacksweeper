@@ -1,0 +1,28 @@
+class Rand {
+    field int pulls, seed;
+
+    constructor Rand new(int sd) {
+        let seed = sd;
+
+        return this;
+    }
+
+
+    method int randInt(int range) {
+        var int randNum;
+        let randNum = seed;
+        let randNum = randNum * 9;
+        let randNum = randNum + (2 * pulls);
+        let randNum = randNum * 4 + pulls;
+        let randNum = randNum / 3;
+        let randNum = randNum + 24;
+        let randNum = randNum * randNum;
+        let randNum = randNum / 4;
+        let randNum = randNum + 23;
+        let randNum = randNum + (3 * pulls);
+
+        let randNum = randNum - ((randNum / range) * range);
+        let pulls = pulls + 1;
+        return randNum;
+    }
+}
