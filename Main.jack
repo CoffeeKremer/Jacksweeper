@@ -1,10 +1,8 @@
 class Main {
 
     // TODO:
-    // Create rand func/class
-    //     NOTE: The player will have to give inputs for randomness
-    // Set mines (ref. prev)
-    // Set tile nums (ref. prev)
+    // Set mines
+    // Set tile nums
     // Get memory offset (Each tile is 32x32, or 16x16 with 1 pixel meaning 2)
     //     for cursor placement and tile drawing
     // Get KBD support
@@ -25,6 +23,24 @@ class Main {
             }
         let blockrow = blockrow + 1;
         }
+        var boolean running;
+        var boolean started;
+        var int time, moves;
+
+        let running = true;
+
+        while (running = true) {
+            if (started = false) {
+                let time = time + 1
+            }
+
+
+
+
+        }
+
+
+
         return;
     }
 
