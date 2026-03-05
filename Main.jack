@@ -11,6 +11,20 @@ class Main {
     // Create game loop (ref. all prev)
 
     function void main() {
+        var int blockrow;
+        var int blockcol;
+        var int location;
+        var int screen;
+        let blockrow = 0;
+        while (blockrow < 8){
+            let blockcol = 0;
+            while (blockcol < 16){
+                let location = (blockrow * 1024) + (blockcol * 2);
+                let blockcol = blockcol + 1;
+                do Tile.pokeBorder(location); 
+            }
+        let blockrow = blockrow + 1;
+        }
         return;
     }
 
