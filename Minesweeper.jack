@@ -15,9 +15,8 @@ class Minesweeper {
         let minefield = Array.new(size);
 
         while (i < arrayObjs) {
-            // Tile object demands 4 bytes, so index every 4 bytes.
-            let arrayIndex = i * 4;
             minefield[arrayIndex] = Tile.new();
+            let i = i + 1;
         }
 
 
@@ -26,8 +25,20 @@ class Minesweeper {
     }
 
 
-    method void plantMines() {
-        // Need to make a rand func/class
+    method void plantMines(int seed) {
+        var Tile t;
+        var Rand rd;
+        var int rdnum, i, arrSize, arrayIndex;
+        let arrSize = width * height;
+        let rd = Rand.new(seed)
+
+        while (i < arrSize) {
+            let t = minefield[arrayIndex];
+            let rdnum = rd.randInt(8)
+            if (rdnum = 7) {
+                t.setType(9);
+            }
+        }
 
     }
 

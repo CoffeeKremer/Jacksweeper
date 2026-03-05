@@ -1,4 +1,6 @@
 class Tile {
+    // Type should be in range (inclusive) of 0-9
+    // 9 being a mine, and the rest being the surounding mines.
     field int type;
     field boolean sel, flagged, uncovered;
 
@@ -23,6 +25,11 @@ class Tile {
 
     method void incType() {
         let type = type + 1;
+        return;
+    }
+
+    method void setType(int val) {
+        let type = val;
         return;
     }
 
