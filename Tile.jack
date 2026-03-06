@@ -33,6 +33,10 @@ class Tile {
         return;
     }
 
+    method int getType() {
+        return type;
+    }
+
     function void pokeCursor(int location) {
         var int memAddress;
         let memAddress = 16384+location;

@@ -5,17 +5,15 @@ class Minesweeper {
     constructor Minesweeper new(int sizex, int sizey) {
         var int i;
         var int size;
-        var int arrayIndex;
         var int arrayObjs;
 
-        let size = sizex * sizey * 4; // The Tile class takes 4 bytes (4x16).
         let arrayObjs = sizex * sizey; // Object Count
         let width = sizex;
         let height = sizey;
         let minefield = Array.new(size);
 
         while (i < arrayObjs) {
-            minefield[arrayIndex] = Tile.new();
+            minefield[i] = Tile.new();
             let i = i + 1;
         }
 
@@ -30,11 +28,11 @@ class Minesweeper {
         var Rand rd;
         var int rdnum, i, arrSize, arrayIndex;
         let arrSize = width * height;
-        let rd = Rand.new(seed)
+        let rd = Rand.new(seed);
 
         while (i < arrSize) {
-            let t = minefield[arrayIndex];
-            let rdnum = rd.randInt(8)
+            let t = minefield[i];
+            let rdnum = rd.randInt(8);
             if (rdnum = 7) {
                 t.setType(9);
             }
@@ -43,7 +41,54 @@ class Minesweeper {
     }
 
     method void setTileNums() {
-        // Create plantMines first!
+        var Tile t, checkTile;
+        var int i, size, count, checkIndex;
+        var int row, col, dr, dc, nr, nc;
+
+        let size = width * height;
+        let i = 0;
+
+        while (i < size) {
+            let t = minefield[i];
+
+            if (~(t.getType() = 9)) {
+                let count = 0;
+                let row = i / width;
+                let col = i - (row * width);
+
+                // row difference (or delta row)
+                let dr = -1;
+                while (dr < 2) {
+                    let dc = -1;
+                    while (dc < 2) {
+
+                        // Goofy trick on how to skip this tile.
+                        if (~((dr = 0) & (dc = 0))) {
+                            let nr = row + dr;
+                            let nc = col + dc;
+
+                            // Bounds check
+                            if ((nr > -1) & (nr < height) & (nc > -1) & (nc < width)) {
+                                let checkIndex = (nr * width) + nc;
+                                let checkTile = minefield[checkIndex];
+
+                                if (checkTile.getType() = 9) {
+                                    let count = count + 1;
+                                }
+                            }
+                        }
+
+                        let dc = dc + 1;
+                    }
+                    let dr = dr + 1;
+                }
+
+                do t.setType(count);
+            }
+
+            let i = i + 1;
+        }
+        return;
     }
 
 }
