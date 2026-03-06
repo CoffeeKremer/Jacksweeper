@@ -1,29 +1,23 @@
 class Main {
-
-    // TODO:
-    // Set mines
-    // Set tile nums
-    // Get memory offset (Each tile is 32x32, or 16x16 with 1 pixel meaning 2)
-    //     for cursor placement and tile drawing
-    // Get KBD support
-    // Create game loop (ref. all prev)
-    // Make sure to get the cursor done and actually selecting the block
+    static Minesweeper game;
+    static boolean running;
     static int cursorRow;
     static int cursorCol;
+    static Array dirty; // A little bit of optimization.
 
     function void main() {
         var int blockrow, blockcol, location, tIndex, moves, time, key, seed;
         var Tile t;
-        var Minesweeper game;
-        var boolean running, started;
+        var Array mf;
+
+        var boolean started;
         //grid
         //position
         let cursorRow = 0;
         let cursorCol = 0;
         let running = true;
         let game = Minesweeper.new(16, 8);
-        do Main.drawCursor();
-        do game.plantMines();
+
 
         while (started = false) {
             let time = time + 1;
@@ -32,75 +26,64 @@ class Main {
             if (key = 128) {
                 let started = true;
                 let seed = time + moves;
+                do Sys.wait(500);
             }
         }
 
         do game.plantMines(seed);
         do game.setTileNums();
 
+        let dirty = Array.new(128);
+        let tIndex = 0;
+        while (tIndex < 128) {
+            // Draw all during inital boot.
+            let dirty[tIndex] = true;
+            let tIndex = tIndex + 1;
+        }
+        do Main.drawCursor();
+
         //loop
         while (running = true) {
             do Main.handleInput();
             let blockrow = 0;
             let tIndex = 0;
+            let mf = game.getMinefield();
             while (blockrow < 8) {
                 let blockcol = 0;
                 while (blockcol < 16) {
-                    let location = (blockrow * 1024) + (blockcol * 2);
 
-                    let t = game.minefield[tIndex];
-                    if (t.uncovered = false) {
+                    // Only draw this tile if it changed
+                    if (dirty[tIndex] = true) {
+                        let location = (blockrow * 1024) + (blockcol * 2);
+                        let t = mf[tIndex];
+
                         do Tile.pokeBorder(location);
-                    }
-                    if (t.flagged = true) {
-                        do Tile.pokeFlag(location);
-                    }
-                    else {
-                        if (t.type = 0) {
-                            do Tile.pokeZero(location);
-                        }
-                        if (t.type = 1) {
-                            do Tile.pokeOne(location);
-                        }
-                        if (t.type = 2) {
-                            do Tile.pokeTwo(location);
-                        }
-                        if (t.type = 3) {
-                            do Tile.pokeThree(location);
-                        }
-                        if (t.type = 4) {
-                            do Tile.pokeFour(location);
-                        }
-                        if (t.type = 5) {
-                            do Tile.pokeFive(location);
-                        }
-                        if (t.type = 6) {
-                            do Tile.pokeSix(location);
-                        }
-                        if (t.type = 7) {
-                            do Tile.pokeSeven(location);
-                        }
-                        if (t.type = 8) {
-                            do Tile.pokeEight(location);
-                        }
-                        if (t.type = 9) {
-                            do Tile.pokeMine(location);
-                        }
-                    }
 
+                        if (t.getUncovered() = false) {
+                            if (t.getFlagged() = true) {
+                                do Tile.pokeFlag(location);
+                            }
+                        } else {
+                            if (t.getType() = 0) { do Tile.pokeZero(location); }
+                            if (t.getType() = 1) { do Tile.pokeOne(location); }
+                            if (t.getType() = 2) { do Tile.pokeTwo(location); }
+                            if (t.getType() = 3) { do Tile.pokeThree(location); }
+                            if (t.getType() = 4) { do Tile.pokeFour(location); }
+                            if (t.getType() = 5) { do Tile.pokeFive(location); }
+                            if (t.getType() = 6) { do Tile.pokeSix(location); }
+                            if (t.getType() = 7) { do Tile.pokeSeven(location); }
+                            if (t.getType() = 8) { do Tile.pokeEight(location); }
+                            if (t.getType() = 9) { do Tile.pokeMine(location); }
+                        }
+
+                        let dirty[tIndex] = false;  // ← clear after drawing
+                    }
 
                     let blockcol = blockcol + 1;
                     let tIndex = tIndex + 1;
                 }
                 let blockrow = blockrow + 1;
             }
-
-
-
-
-
-
-
         }
 
         do Sys.halt();
@@ -125,17 +108,41 @@ class Main {
         var int key;
         let key = Keyboard.keyPressed();
 
-        if (key = 131) { do Main.moveUp(); }
-        if (key = 133) { do Main.moveDown(); }
-        if (key = 130) { do Main.moveLeft(); }
-        if (key = 132) { do Main.moveRight(); }
-        if (key = 32)  { do Main.selectTile(); }
-        if (key = 128) { do Main.confirm(); }
+        if (key = 131) {
+            do Main.moveUp();
+            while (~(Keyboard.keyPressed() = 0)) {
+        do Sys.wait(5);
+            }
+        }
+        if (key = 133) {
+            do Main.moveDown();
+            do Sys.wait(100);
+            }
+        if (key = 130) {
+            do Main.moveLeft();
+            do Sys.wait(100);
+            }
+        if (key = 132) {
+             do Main.moveRight();
+             do Sys.wait(100);
+             }
+        if (key = 32)  {
+            do Main.selectTile();
+            do Sys.wait(100);
+            }
+        if (key = 128) {
+            do Main.confirm();
+            do Sys.wait(100);
+            }
+
         return;
     }
 
     function void moveUp() {
+        var int arrIndex;
         if (cursorRow > 0) {
+            let arrIndex = (16 * cursorRow) + cursorCol;
+            let dirty[arrIndex] = true;
             do Main.eraseCursor();
             let cursorRow = cursorRow - 1;
             do Main.drawCursor();
@@ -144,7 +151,10 @@ class Main {
     }
 
     function void moveDown() {
+        var int arrIndex;
         if (cursorRow < 7) {
+            let arrIndex = (16 * cursorRow) + cursorCol;
+            let dirty[arrIndex] = true;
             do Main.eraseCursor();
             let cursorRow = cursorRow + 1;
             do Main.drawCursor();
@@ -153,7 +163,10 @@ class Main {
     }
 
     function void moveLeft() {
+        var int arrIndex;
         if (cursorCol > 0) {
+            let arrIndex = (16 * cursorRow) + cursorCol;
+            let dirty[arrIndex] = true;
             do Main.eraseCursor();
             let cursorCol = cursorCol - 1;
             do Main.drawCursor();
@@ -162,7 +175,10 @@ class Main {
     }
 
     function void moveRight() {
+        var int arrIndex;
         if (cursorCol < 15) {
+            let arrIndex = (16 * cursorRow) + cursorCol;
+            let dirty[arrIndex] = true;
             do Main.eraseCursor();
             let cursorCol = cursorCol + 1;
             do Main.drawCursor();
@@ -171,12 +187,33 @@ class Main {
     }
 
     function void selectTile() {
-        // TODO: flag or select the current tile
+        var int arrIndex;
+        var Array mf;
+        var Tile t;
+        let arrIndex = (16 * cursorRow) + cursorCol;
+        let mf = game.getMinefield();
+        let t = mf[arrIndex];
+        do t.flipFlag();
+        let dirty[arrIndex] = true;
         return;
     }
 
     function void confirm() {
-        // TODO: uncover the current tile
+        var int arrIndex;
+        var Array mf;
+        var Tile t;
+        var boolean mine;
+        let arrIndex = (16 * cursorRow) + cursorCol;
+        let mf = game.getMinefield();
+        let t = mf[arrIndex];
+        let mine = t.uncoverTile();
+        if (t.getFlagged() = true) {
+            return;
+        }
+        let dirty[arrIndex] = true;
+        if (mine = true) {
+            let running = false;
+        }
         return;
     }
 }

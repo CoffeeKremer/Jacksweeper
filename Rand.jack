@@ -1,28 +1,34 @@
 class Rand {
-    field int pulls, seed;
+    field int seed;
 
     constructor Rand new(int sd) {
         let seed = sd;
-
+        if (seed = 0) {
+            let seed = 2323;
+        }
         return this;
     }
 
 
     method int randInt(int range) {
         var int randNum;
-        let randNum = seed;
-        let randNum = randNum * 9;
-        let randNum = randNum + (2 * pulls);
-        let randNum = randNum * 4 + pulls;
-        let randNum = randNum / 3;
-        let randNum = randNum + 24;
-        let randNum = randNum * randNum;
-        let randNum = randNum / 4;
-        let randNum = randNum + 23;
-        let randNum = randNum + (3 * pulls);
 
-        let randNum = randNum - ((randNum / range) * range);
-        let pulls = pulls + 1;
+        // XOR shift — very overflow-safe for 16-bit
+        let seed = seed + 1;
+        let seed = seed + (seed * 13);
+        let seed = seed + 1731;
+        if (seed < 0) { let seed = -seed; }
+
+        let randNum = seed - ((seed / range) * range);
         return randNum;
+    }
+
+    function int modPositive(int a, int b) {
+        var int r;
+        let r = a - ((a / b) * b);
+        if (r < 0) {
+            let r = r + b;
+        }
+        return r;
     }
 }

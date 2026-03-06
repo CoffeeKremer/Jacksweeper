@@ -1,25 +1,28 @@
 class Minesweeper {
-    static int width, height;
-    static Array minefield;
+    field int width, height;
+    field Array minefield;
 
     constructor Minesweeper new(int sizex, int sizey) {
         var int i;
-        var int size;
         var int arrayObjs;
 
         let arrayObjs = sizex * sizey; // Object Count
         let width = sizex;
         let height = sizey;
-        let minefield = Array.new(size);
+        let minefield = Array.new(arrayObjs);
 
         while (i < arrayObjs) {
-            minefield[i] = Tile.new();
+            let minefield[i] = Tile.new();
             let i = i + 1;
         }
 
 
 
         return this;
+    }
+
+    method Array getMinefield() {
+        return minefield;
     }
 
 
@@ -34,10 +37,12 @@ class Minesweeper {
             let t = minefield[i];
             let rdnum = rd.randInt(8);
             if (rdnum = 7) {
-                t.setType(9);
+                do t.setType(9);
             }
+            let i = i + 1;
         }
 
+        return;
     }
 
     method void setTileNums() {
