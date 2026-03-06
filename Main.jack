@@ -10,97 +10,31 @@ class Main {
     // Make sure to get the cursor done and actually selecting the block
     static int cursorRow;
     static int cursorCol;
-
+    static Array tileTypes;
     function void main() {
-        var int blockrow, blockcol, location, tIndex, moves, time, key, seed;
-        var Tile t;
-        var Minesweeper game;
-        var boolean running, started;
+    var int blockrow, blockcol, location;
+    //Tile types for call back because cursor keeps on messing with stuff
+    let tileTypes = Array.new(128);
         //grid
-        //position
-        let cursorRow = 0;
-        let cursorCol = 0;
-        let running = true;
-        let game = Minesweeper.new(16, 8);
-        do Main.drawCursor();
-        do game.plantMines();
-
-        while (started = false) {
-            let time = time + 1;
-            let moves = moves + Keyboard.keyPressed();
-            let key = Keyboard.keyPressed();
-            if (key = 128) {
-                let started = true;
-                let seed = time + moves;
+        let blockrow = 0;
+        while (blockrow < 8) {
+            let blockcol = 0;
+            while (blockcol < 16) {
+                let location = (blockrow * 1024) + (blockcol * 2);
+                do Tile.pokeBorder(location);
+                let blockcol = blockcol + 1;
             }
+            let blockrow = blockrow + 1;
         }
 
-        do game.plantMines(seed);
-        do game.setTileNums();
+        //position 
+        let cursorRow = 0;
+        let cursorCol = 0;
+        do Main.drawCursor();
 
         //loop
-        while (running = true) {
+        while (true) {
             do Main.handleInput();
-            let blockrow = 0;
-            let tIndex = 0;
-            while (blockrow < 8) {
-                let blockcol = 0;
-                while (blockcol < 16) {
-                    let location = (blockrow * 1024) + (blockcol * 2);
-
-                    let t = game.minefield[tIndex];
-                    if (t.uncovered = false) {
-                        do Tile.pokeBorder(location);
-                    }
-                    if (t.flagged = true) {
-                        do Tile.pokeFlag(location);
-                    }
-                    else {
-                        if (t.type = 0) {
-                            do Tile.pokeZero(location);
-                        }
-                        if (t.type = 1) {
-                            do Tile.pokeOne(location);
-                        }
-                        if (t.type = 2) {
-                            do Tile.pokeTwo(location);
-                        }
-                        if (t.type = 3) {
-                            do Tile.pokeThree(location);
-                        }
-                        if (t.type = 4) {
-                            do Tile.pokeFour(location);
-                        }
-                        if (t.type = 5) {
-                            do Tile.pokeFive(location);
-                        }
-                        if (t.type = 6) {
-                            do Tile.pokeSix(location);
-                        }
-                        if (t.type = 7) {
-                            do Tile.pokeSeven(location);
-                        }
-                        if (t.type = 8) {
-                            do Tile.pokeEight(location);
-                        }
-                        if (t.type = 9) {
-                            do Tile.pokeMine(location);
-                        }
-                    }
-
-
-                    let blockcol = blockcol + 1;
-                    let tIndex = tIndex + 1;
-                }
-                let blockrow = blockrow + 1;
-            }
-
-
-
-
-
-
-
         }
 
         do Sys.halt();
@@ -110,6 +44,14 @@ class Main {
     function int getLocation() {
         return (cursorRow * 1024) + (cursorCol * 2);
     }
+    function void setTileType(int row, int col, int tileType) {
+        let tileTypes[(row * 16) + col] = tileType;
+        return;
+    }
+
+    function int getTileType(int row, int col) {
+        return tileTypes[(row * 16) + col];
+    }
 
     function void drawCursor() {
         do Tile.pokeCursor(Main.getLocation());
@@ -117,7 +59,13 @@ class Main {
     }
 
     function void eraseCursor() {
-        do Tile.pokeBorder(Main.getLocation());
+        var int index;
+        let index = (cursorRow * 16) + cursorCol;
+        if (tileTypes[index] = 2) {
+            do Tile.pokeFlag(Main.getLocation());
+        } else {
+            do Tile.pokeBorder(Main.getLocation());
+        }
         return;
     }
 
@@ -125,12 +73,35 @@ class Main {
         var int key;
         let key = Keyboard.keyPressed();
 
-        if (key = 131) { do Main.moveUp(); }
-        if (key = 133) { do Main.moveDown(); }
-        if (key = 130) { do Main.moveLeft(); }
-        if (key = 132) { do Main.moveRight(); }
-        if (key = 32)  { do Main.selectTile(); }
-        if (key = 128) { do Main.confirm(); }
+        if (key = 131) { 
+            do Main.moveUp(); 
+            while (~(Keyboard.keyPressed() = 0)) {
+        do Sys.wait(5);
+            }
+        }
+        if (key = 133) { 
+            do Main.moveDown(); 
+            do Sys.wait(25);
+            }
+        if (key = 130) { 
+            do Main.moveLeft();
+            do Sys.wait(25); 
+            }
+        if (key = 132) {
+             do Main.moveRight();
+             do Sys.wait(25); 
+             }
+        if (key = 32)  { 
+            do Main.selectTile(); 
+            do Sys.wait(500); 
+            }
+        if (key = 128) { 
+            do Main.confirm();
+            do Sys.wait(25); 
+            }
+
+
+    
         return;
     }
 
@@ -171,7 +142,15 @@ class Main {
     }
 
     function void selectTile() {
-        // TODO: flag or select the current tile
+        var int index;
+        let index = (cursorRow * 16) + cursorCol;
+        if (tileTypes[index] = 2) {
+            let tileTypes[index] = 0;
+            do Tile.pokeBorder(Main.getLocation());
+        } else {
+            let tileTypes[index] = 2;
+            do Tile.pokeFlag(Main.getLocation());
+        }
         return;
     }
 
@@ -180,3 +159,7 @@ class Main {
         return;
     }
 }
+
+
+
+
