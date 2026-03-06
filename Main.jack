@@ -7,41 +7,113 @@ class Main {
     //     for cursor placement and tile drawing
     // Get KBD support
     // Create game loop (ref. all prev)
+    // Make sure to get the cursor done and actually selecting the block
+    static int cursorRow;
+    static int cursorCol;
 
     function void main() {
-        var int blockrow;
-        var int blockcol;
-        var int location;
-        var int screen;
+        var int blockrow, blockcol, location;
+
+        //grid
         let blockrow = 0;
-        while (blockrow < 8){
+        while (blockrow < 8) {
             let blockcol = 0;
-            while (blockcol < 16){
+            while (blockcol < 16) {
                 let location = (blockrow * 1024) + (blockcol * 2);
+                do Tile.pokeBorder(location);
                 let blockcol = blockcol + 1;
-                do Tile.pokeBorder(location); 
             }
-        let blockrow = blockrow + 1;
-        }
-        var boolean running;
-        var boolean started;
-        var int time, moves;
-
-        let running = true;
-
-        while (running = true) {
-            if (started = false) {
-                let time = time + 1
-            }
-
-
-
-
+            let blockrow = blockrow + 1;
         }
 
+        //position 
+        let cursorRow = 0;
+        let cursorCol = 0;
+        do Main.drawCursor();
 
+        //loop
+        while (true) {
+            do Main.handleInput();
+        }
 
+        do Sys.halt();
         return;
     }
 
+    function int getLocation() {
+        return (cursorRow * 1024) + (cursorCol * 2);
+    }
+
+    function void drawCursor() {
+        do Tile.pokeFlag(Main.getLocation());
+        return;
+    }
+
+    function void eraseCursor() {
+        do Tile.pokeBorder(Main.getLocation());
+        return;
+    }
+
+    function void handleInput() {
+        var int key;
+        let key = Keyboard.keyPressed();
+
+        if (key = 131) { do Main.moveUp(); }
+        if (key = 133) { do Main.moveDown(); }
+        if (key = 130) { do Main.moveLeft(); }
+        if (key = 132) { do Main.moveRight(); }
+        if (key = 32)  { do Main.selectTile(); }
+        if (key = 128) { do Main.confirm(); }
+        return;
+    }
+
+    function void moveUp() {
+        if (cursorRow > 0) {
+            do Main.eraseCursor();
+            let cursorRow = cursorRow - 1;
+            do Main.drawCursor();
+        }
+        return;
+    }
+
+    function void moveDown() {
+        if (cursorRow < 7) {
+            do Main.eraseCursor();
+            let cursorRow = cursorRow + 1;
+            do Main.drawCursor();
+        }
+        return;
+    }
+
+    function void moveLeft() {
+        if (cursorCol > 0) {
+            do Main.eraseCursor();
+            let cursorCol = cursorCol - 1;
+            do Main.drawCursor();
+        }
+        return;
+    }
+
+    function void moveRight() {
+        if (cursorCol < 15) {
+            do Main.eraseCursor();
+            let cursorCol = cursorCol + 1;
+            do Main.drawCursor();
+        }
+        return;
+    }
+
+    function void selectTile() {
+        // TODO: flag or select the current tile
+        return;
+    }
+
+    function void confirm() {
+        // TODO: uncover the current tile
+        return;
+    }
 }
+
+
+
+
