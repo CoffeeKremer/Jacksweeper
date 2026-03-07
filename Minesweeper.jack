@@ -35,7 +35,11 @@ class Minesweeper {
 
         while (i < arrSize) {
             let t = minefield[i];
+
+            // Change the following numbers to change difficulty.
+            //                     ↓
             let rdnum = rd.randInt(8);
+            //          ↓ - Can be changed, must remain between 0 and the randInt arg -1
             if (rdnum = 7) {
                 do t.setType(9);
             }
@@ -66,7 +70,6 @@ class Minesweeper {
                 while (dr < 2) {
                     let dc = -1;
                     while (dc < 2) {
-
                         // Goofy trick on how to skip this tile.
                         if (~((dr = 0) & (dc = 0))) {
                             let nr = row + dr;

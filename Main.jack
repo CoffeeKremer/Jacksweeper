@@ -18,11 +18,13 @@ class Main {
         let running = true;
         let game = Minesweeper.new(16, 8);
 
-
+        // Pregame
+        // Collect a seed, using time and key codes
         while (started = false) {
             let time = time + 1;
             let moves = moves + Keyboard.keyPressed();
             let key = Keyboard.keyPressed();
+            // continue on Enter
             if (key = 128) {
                 let started = true;
                 let seed = time + moves;
@@ -42,21 +44,28 @@ class Main {
         }
         do Main.drawCursor();
 
-        //loop
+        // Main Loop
         while (running = true) {
             do Main.handleInput();
             let blockrow = 0;
             let tIndex = 0;
             let mf = game.getMinefield();
+
+            // Draw (Poke) loop
             while (blockrow < 8) {
                 let blockcol = 0;
                 while (blockcol < 16) {
 
                     // Only draw this tile if it changed
                     if (dirty[tIndex] = true) {
+                        // Location is the mem addr of the top left corner
+                        // of all sprites, so get the mem addr to plant
+                        // the sprites.
                         let location = (blockrow * 1024) + (blockcol * 2);
                         let t = mf[tIndex];
 
+                        // Poking border resets the tile.
+                        // Use it to clean up tiles for redrawing.
                         do Tile.pokeBorder(location);
 
                         if (t.getUncovered() = false) {
@@ -76,7 +85,7 @@ class Main {
                             if (t.getType() = 9) { do Tile.pokeMine(location); }
                         }
 
-                        let dirty[tIndex] = false;  // ← clear after drawing
+                        let dirty[tIndex] = false;
                     }
 
                     let blockcol = blockcol + 1;

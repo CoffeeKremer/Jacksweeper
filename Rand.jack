@@ -13,22 +13,15 @@ class Rand {
     method int randInt(int range) {
         var int randNum;
 
-        // XOR shift — very overflow-safe for 16-bit
+        // Linear Congruential Generator
+        // My previous one was pretty bad and had weird behavior.
         let seed = seed + 1;
         let seed = seed + (seed * 13);
         let seed = seed + 1731;
+        // Only positive nums allowed.
         if (seed < 0) { let seed = -seed; }
 
         let randNum = seed - ((seed / range) * range);
         return randNum;
-    }
-
-    function int modPositive(int a, int b) {
-        var int r;
-        let r = a - ((a / b) * b);
-        if (r < 0) {
-            let r = r + b;
-        }
-        return r;
     }
 }
